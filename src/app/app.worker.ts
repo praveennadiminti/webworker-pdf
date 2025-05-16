@@ -1,6 +1,8 @@
 /// <reference lib="webworker" />
 
+import { createPdfBytes } from './webworker/createPdfBytes';
+
 addEventListener('message', ({ data }) => {
-  const response = `worker response to ${data}`;
-  postMessage(response);
+  const bytes = createPdfBytes();
+  postMessage(bytes);
 });
