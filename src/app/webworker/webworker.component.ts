@@ -27,6 +27,7 @@ export class WebworkerComponent {
         const blob = new Blob([data], { type: 'application/pdf' });
 
         saveAs(blob, 'document.pdf');
+        worker.terminate();
       };
       worker.postMessage('hello');
     } else {
