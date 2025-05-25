@@ -1,0 +1,32 @@
+{
+  "items": [
+    {
+      "number": "1",
+      "isPrime": "YES"
+    },
+    {
+      "number": "2",
+      "isPrime": "YES"
+    },
+    {
+      "number": "3",
+      "isPrime": "YES"
+    },
+    {
+      "number": "4",
+      "isPrime": "NO"
+    },
+    {
+      "number": "5",
+      "isPrime": "YES"
+    },
+    {
+      "number": "6",
+      "isPrime": "NO"
+    },
+    {
+      "number": "7",
+      "isPrime": "YES"
+    }
+  ]
+}
