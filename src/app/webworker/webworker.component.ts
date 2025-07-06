@@ -15,25 +15,9 @@ export class WebworkerComponent {
   counter = 1;
 
   generatePdf() {
-    // /**
     const data = createPdfBytes();
     const blob = new Blob([data], { type: 'application/pdf' });
     saveAs(blob, 'document.pdf');
-    // **/
-
-    /**
-    if (typeof Worker !== 'undefined') {
-      const worker = new Worker(new URL('./app.worker.ts', import.meta.url));
-      worker.onmessage = ({ data }) => {
-        console.log(`page got message: ${data}`);
-        const blob = new Blob([data], { type: 'application/pdf' });
-
-        saveAs(blob, 'document.pdf');
-        worker.terminate();
-      };
-      worker.postMessage('hello');
-    }
-    **/
   }
 
   decrementCounter() {
@@ -50,13 +34,6 @@ export class WebworkerComponent {
       const worker = new Worker(new URL('./pdfTemplate.worker.ts', import.meta.url));
       worker.onmessage = ({ data }) => {
         console.log(`page got message: ${data}`);
-        // const doc = new jsPDF();
-        // doc.html(data,
-        //   {
-        //     callback: function (generatedDoc) {
-        //       generatedDoc.save();
-        //     }
-        //   });
         var printWindow = window.open('', '', 'height=400,width=800');
         if (printWindow) {
           printWindow.document.write(data);
@@ -71,7 +48,7 @@ export class WebworkerComponent {
 
   generatePdfCompleteFromWebWorker() {
     if (typeof Worker !== 'undefined') {
-      const worker = new Worker(new URL('./app2.worker.ts', import.meta.url));
+      const worker = new Worker(new URL('./pdfComplete.worker.ts', import.meta.url));
       worker.onmessage = ({ data }) => {
         console.log(`page got message: ${data}`);
         const blob = new Blob([data], { type: 'application/pdf' });
@@ -85,7 +62,7 @@ export class WebworkerComponent {
 
   generatePdfFromWebWorkerAPI() {
     if (typeof Worker !== 'undefined') {
-      const worker = new Worker(new URL('./app3.worker.ts', import.meta.url));
+      const worker = new Worker(new URL('./pdfCompleteApi.worker.ts', import.meta.url));
       worker.onmessage = ({ data }) => {
         console.log(`page got message: ${data}`);
         const blob = new Blob([data], { type: 'application/pdf' });
@@ -116,9 +93,6 @@ export class WebworkerComponent {
           console.log('Received unknown message from worker:', data);
         }
       };
-      // Example of a large data URL (replace with your actual large file endpoint)
-      // For demonstration, using a sample large PDF file from the internet:
-      // Use the proxy to avoid CORS issues
       worker.postMessage('/api/DownloadFiles/SampleFile?filename=sampledocs-100mb-pdf-file&ext=pdf');
     }
   }
