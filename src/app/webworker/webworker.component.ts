@@ -122,4 +122,40 @@ export class WebworkerComponent {
       worker.postMessage('/api/DownloadFiles/SampleFile?filename=sampledocs-100mb-pdf-file&ext=pdf');
     }
   }
+
+  downloadFileWithCharts() {
+    if (typeof Worker !== 'undefined') {
+      const worker = new Worker(new URL('./charts.worker.ts', import.meta.url));
+      worker.onmessage = ({ data }) => {
+        console.log(`page got message: ${data}`);
+        const blob = new Blob([data], { type: 'application/pdf' });
+
+        saveAs(blob, 'document.pdf');
+        worker.terminate();
+      };
+      // Pass data to charts.worker.ts, for example, chart configuration or data
+      const chartData = {
+        title: 'Sales Report',
+        labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+        values: [120, 150, 170, 200],
+        type: 'bar',
+        data: {
+          labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+          datasets: [{
+            label: 'Sales',
+            data: [120, 150, 170, 200],
+            backgroundColor: 'rgba(75, 192, 192, 0.5)'
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'top' },
+            title: { display: true, text: 'Sales Report' }
+          }
+        }
+      };
+      worker.postMessage(chartData);
+    }
+  }
 }
