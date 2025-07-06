@@ -85,21 +85,24 @@ function createChartImage(chartData: any): Promise<string> {
     });
 }
 
-addEventListener('message', async (event: MessageEvent<{ chartData: any; chartOptions: any }>) => {
+addEventListener('message', async (event: MessageEvent<{ charts: any[] }>) => {
     const { data } = event;
     console.log("Received data in worker:", data);
-    // data: { chartData, chartOptions }
+    // data: { charts: [barChartData, pieChartData] }
     const doc = new jsPDF();
 
-    // Generate chart image
-    const chartImage = await createChartImage(data);
-
-    // Add chart image to PDF
-    doc.addImage(chartImage, 'PNG', 15, 40, 180, 120);
-
-    // Optionally add a title
-    doc.setFontSize(16);
-    doc.text("Chart Report", 15, 20);
+    let y = 20;
+    for (const chartData of data.charts) {
+        // Add chart title
+        doc.setFontSize(16);
+        doc.text(chartData.title || 'Chart', 15, y);
+        y += 10;
+        // Generate chart image
+        const chartImage = await createChartImage(chartData);
+        // Add chart image to PDF
+        doc.addImage(chartImage, 'PNG', 15, y, 180, 120);
+        y += 130;
+    }
 
     // Return the PDF as Uint8Array
     const pdfBytes = doc.output('arraybuffer');

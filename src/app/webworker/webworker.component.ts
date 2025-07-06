@@ -107,8 +107,8 @@ export class WebworkerComponent {
         saveAs(blob, 'document.pdf');
         worker.terminate();
       };
-      // Pass data to charts.worker.ts, for example, chart configuration or data
-      const chartData = {
+      // Bar chart data
+      const barChartData = {
         title: 'Sales Report',
         labels: ['Q1', 'Q2', 'Q3', 'Q4'],
         values: [120, 150, 170, 200],
@@ -129,7 +129,34 @@ export class WebworkerComponent {
           }
         }
       };
-      worker.postMessage(chartData);
+      // Pie chart data
+      const pieChartData = {
+        title: 'Market Share',
+        labels: ['Product A', 'Product B', 'Product C'],
+        values: [45, 30, 25],
+        type: 'pie',
+        data: {
+          labels: ['Product A', 'Product B', 'Product C'],
+          datasets: [{
+            label: 'Market Share',
+            data: [45, 30, 25],
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.7)',
+              'rgba(54, 162, 235, 0.7)',
+              'rgba(255, 206, 86, 0.7)'
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'top' },
+            title: { display: true, text: 'Market Share' }
+          }
+        }
+      };
+      // Send both chart data objects to the worker
+      worker.postMessage({ charts: [barChartData, pieChartData] });
     }
   }
 }
